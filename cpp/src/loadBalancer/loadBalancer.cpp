@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    // Error checking: required args
+    // required args
     if (!result.count("port") || !result.count("servers") ||
         (result.count("geo") == result.count("rr"))) {
         std::cerr << "Error: Must specify --port, --servers, and exactly one of --geo or --rr." << std::endl;
@@ -44,8 +44,9 @@ int main(int argc, char* argv[]) {
 
     spdlog::info("Load balancer started on port {}", port);
 
-    // 1. Parse the server info file here (you will implement this)
-    // 2. Set up the listening socket
+    // IMPLEMENT: parse the server info file
+
+    // set up listening socket
     int listen_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (listen_fd < 0) {
         spdlog::error("Failed to create socket");
@@ -53,7 +54,7 @@ int main(int argc, char* argv[]) {
     }
     sockaddr_in server_addr{};
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY; // Listen on all interfaces
+    server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(port);
 
     if (bind(listen_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
@@ -68,7 +69,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // 3. Main accept() loop (you will expand this to handle requests per spec)
+    // IMPLEMENT: main accept() loop
     while (true) {
         sockaddr_in client_addr{};
         socklen_t client_len = sizeof(client_addr);
